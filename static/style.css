@@ -1,0 +1,43 @@
+table{
+    border-collapse: collapse;
+    border: 2px solid;    
+}
+
+th{
+    text-align: left;
+    font-family: sans-serif;
+    background-color:darkslateblue;
+    color:white;
+
+}
+
+tr{
+  border: 1px solid;
+}
+
+td{
+    text-align: left;
+  font-family: sans-serif;
+}
+
+td.inc{
+  color:red;
+}
+td.dec{
+  color:darkgreen;
+}
+td.catrow{
+    background-color:slateblue;
+    color:white;
+    font-weight: bold;
+}
+
+h1{
+    font-family: sans-serif;
+
+}
+
+p{
+    font-family:sans-serif;
+
+}

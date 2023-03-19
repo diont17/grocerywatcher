@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>Price changes at new world thorndon</title>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+
+    </head>
+    <body>
+        <h1>Price changes at NW Thorndon</h1>
+        <p><i>Last updated: {{ dates.lastupdate }}</i></p>
+        <p><a href="..">Back to home</a></p>
+        <p>Showing price changes from</p>
+        <ul>
+            <li>Show <a href=pricechanges?startdate={{dates.yesterday}}>Yesterday</a></li>
+            <li>Show <a href=pricechanges?startdate={{dates.lastweek}}>Last week</a></li>
+            <li>Show <a href=pricechanges?startdate={{dates.lastmonth}}>Last month</a></li>
+        </ul>
+        {%if dates.specials%}
+        <p><a href=pricechanges?startdate={{dates.startdate}}&specials=false>Exclude specials?</a></p>
+        {%else%}
+        <p><a href=pricechanges?startdate={{dates.startdate}}&specials=true>Include specials?</a></p>
+        {%endif%}
+        
+        <table>
+            <thead>
+                <tr><th colspan=7>Increases ({{dates.numi}})</th></tr>
+                <th>Product</th><th colspan=3>{{ dates.startdate }}</th><th colspan=3> {{ dates.enddate}}</th>
+            </thead>
+            {%for prod in increases%}
+                {%if prod.header%}
+                <tr><td colspan=1 class="catrow">Category: {{prod.scan}}</td><td colspan=3 class="catrow">{{dates.startdate}}</td><td colspan=3 class="catrow">{{dates.enddate}}</td></tr>
+                {%else%}
+
+                <tr><td><a href='product/{{prod.id}}'>{{prod.name}}</a></td>
+                    <td>{{prod.spweight}}</td>
+                    <td>${{prod.sprice}}</td><td>{{prod.spromo}}</td>
+                    <td>{{prod.epweight}}</td><td>${{prod.eprice}}</td><td>{{prod.epromo}}</td>
+                </tr>
+                {%endif%}
+            {%endfor%}
+        </table>
+        <p>
+            &nbsp
+        </p>
+        <table>
+            <thead>
+                <tr><th colspan=7>Decreases ({{dates.numd}})</th></tr>
+                <th colspan=1>Product</th><th colspan=3>{{dates.startdate }}</th><th colspan=3> {{dates.enddate}}</th>
+            </thead>
+            {%for prod in decreases%}
+            {%if prod.header%}
+            <tr><td colspan=1 class="catrow">Category: {{prod.scan}}</td><td colspan=3 class="catrow">{{dates.startdate}}</td><td colspan=3 class="catrow">{{dates.enddate}}</td></tr>
+        {%else%}
+
+        <tr><td><a href='products/{{prod.id}}'>{{prod.name}}</a></td>
+            <td>{{prod.pweight}}</td>
+            <td>${{prod.sprice}}</td><td>{{prod.spromo}}</td>
+            <td>{{prod.epweight}}</td><td>${{prod.eprice}}</td><td>{{prod.epromo}}</td>
+        </tr>
+        {%endif%}            {%endfor%}
+        </table>
+
+    </body>
+</html>

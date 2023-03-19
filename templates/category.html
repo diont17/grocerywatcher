@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Prices for {{category.name}} at New World Thorndon</title>
+        <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    </head>
+    <body>
+        <h1>Category {{category.name}}</h1>
+        <p>{{category.rows}} rows</p>
+        <p><a href="../category">Back to category list</a></p>
+        <p><i>Last updated: {{ dates.lastupdate }}</i></p>
+
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan=2>Products in category {{category.name}}</th>
+                    <th colspan=2>{{dates.date1}}</th>
+                    <th colspan=2>{{dates.date2}}</th>
+                    <th colspan=2>{{dates.date3}}</th>
+
+                </tr>
+            
+            </thead>
+            {%for prod in prods%}
+                <tr>
+                    <td><a href="../product/{{prod.id}}">{{prod.name}}</a></td>
+                    <td>{{prod.pweight}}</td>
+
+                    <td class="{{prod.cls1}}">${{prod.price1}}</td>
+                    <td class="{{prod.cls1}}">{{prod.promo1}}</td>
+                    
+                    <td class="{{prod.cls2}}">${{prod.price2}}</td>
+                    <td class="{{prod.cls2}}">{{prod.promo2}}</td>
+
+                    <td>${{prod.price3}}</td>
+                    <td>{{prod.promo3}}</td>
+                </tr>
+            {%endfor%}
+
+        </table>
+
+    </body>
+</html>

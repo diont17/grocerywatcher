@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>Scanned categories</title>
+        <link rel="stylesheet" type="text/css" href="../static/style.css">
+
+        </head>
+    <body>
+        <h1>
+            Category list
+        </h1>
+        <p><a href="..">Back to home</a>
+        <ul>
+            {%for cat in cats%}
+            <li><a href="../category/{{cat}}"">{{cat}}</li>
+            {%endfor%}
+        </ul>
+    </body>
+</html>
