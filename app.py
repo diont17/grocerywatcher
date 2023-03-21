@@ -200,7 +200,7 @@ def product_prices(productid):
     print(len(obsrows))
     price = []
     for o in obsrows:
-        price.append({'date':o[0], 'price': o[1], 'promo':o[2], 'pweight':o[3]})
+        price.append({'date':o[0], 'price': o[1], 'promo':o[2], 'pweight':o[3].split('$')[0]})
         prod = {'name': o[4], 'id':o[5]}
 
     prod['rows'] = len(price)
@@ -250,7 +250,7 @@ def catprices(category):
         obsprice = prod[2]
         prodname = prod[3]
         promo = prod[4]
-        pweight = prod[5]
+        pweight = prod[5].split('$')[0]
         
         gid = re.match('(\d*)-', prodid)
         niceid = gid[0]
@@ -269,7 +269,7 @@ def catprices(category):
         obsprice = prod[2]
         prodname = prod[3]
         promo = prod[4]
-        pweight = prod[5]
+        pweight = prod[5].split("$")[0]
         
         if prodid not in outputlist:
             gid = re.match('(\d*)-', prodid)
@@ -291,7 +291,7 @@ def catprices(category):
         obsprice = prod[2]
         prodname = prod[3]
         promo = prod[4]
-        pweight = prod[5]
+        pweight = prod[5].split('$')[0]
         
         if prodid not in outputlist:
             gid = re.match('(\d*)-', prodid)
@@ -406,4 +406,3 @@ def new_prices():
     conn.close()
 
     return jsonify({'increases':increases, 'decreases': decreases})
-
