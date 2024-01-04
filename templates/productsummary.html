@@ -3,7 +3,7 @@
         <title>Prices for {{prod.name}} at New World Thorndon</title>
         <script src="https://cdn.plot.ly/plotly-2.18.2.min.js"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <link rel="stylesheet" type="text/css" href="../static/style.css">
 
     </head>
     <body>
@@ -11,6 +11,7 @@
         <p>prodid {{prod.id}}</p>
         <p>{{prod.rows}} rows</p>
         <p><i>Last updated: {{ dates.lastupdate }}</i></p>
+        <a href="../category/{{prod.category}}">Back to category</a>
 
         <div id="plotarea" style="width:800px; height:600px;">
 
@@ -18,13 +19,17 @@
         <script>
 
         function makeplot() 
-        {d3.csv("../api/pricehistory?productid={{prod.id}}", function(data) { processData(data) } );};
+        {
+            d3.csv("../api/pricehistory?productid={{prod.id}}", function(data) { processData(data) } );
+        };
 
 
         function processData(allRows) 
         {
-        console.log(allRows);
+        // console.log(allRows);
+
         var x = [], y = [];
+
         for (var i=0; i<allRows.length; i++) {
             row = allRows[i];
             x.push( row['date'] );
@@ -47,11 +52,12 @@
 
         <table>
             <thead>
-                <tr><th colspan=4>Price history ({{dates.startdate}} - {{dates.enddate}})</th></tr>
-                <tr><td>Date</td><td>Price</td><td></td>Weighttext</td><td>Promotion</td></tr>
+                <tr><th colspan=4>Price history ({{dates.enddate}} - {{dates.startdate}})</th></tr>
+                <tr><td>Date</td><td>Price</td><td>Weighttext</td><td>Promotion</td></tr>
             </thead>
-            {%for price in price%}
-                <td>{{price.date}}</td><td>${{price.price}}</td><td>{{price.pweight}}</td><td>{{price.promo}}</td>
+            {%for p in price%}
+            <tr>
+                <td>{{p.date}}</td><td>${{p.price}}</td><td>{{p.pweight}}</td><td>{{p.promo}}</td>
                 </tr>
             {%endfor%}
 

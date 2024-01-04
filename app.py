@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request,abort,g, render_template
 import sqlite3
 from datetime import datetime, timedelta
 import re
+import psycopg2
 
 app = Flask(__name__)
 
@@ -58,11 +59,11 @@ def get_pricehistory():
         abort(404)
 
     enddate=request.args.get('enddate',default='today')
-    print('enddate: ' + enddate)
+    #print('enddate: ' + enddate)
     if enddate=='today':
         enddate=last_update()
     startdate = request.args.get('startdate',default='2022-12-01')
-    print('start date: '+ startdate)
+    #print('start date: '+ startdate)
 
     conn = opendbconn()
 
@@ -95,14 +96,22 @@ def get_categoryhistory():
     if catname==None:
         abort(404)
 
+    enddate=request.args.get('enddate',default='today')
+    #print('enddate: ' + enddate)
+    if enddate=='today':
+        enddate=last_update()
+    startdate = request.args.get('startdate',default='2022-12-01')
+
     conn = opendbconn()
 
-    pricehistory = conn.execute('select productname, obsdate, obsprice, promobadgeimagelabel from observations \
-        where scanname like ? and obsdate>=? and obsdate<=? order by obsdate asc',[catname+'%', startdate, enddate],).fetchall()
+    pricehistory = conn.execute('select productname, obsdate, obsprice, promobadgeimagelabel, productid from observations \
+        where scanname like ? and obsdate>=? and obsdate<=? order by productid, obsdate asc',[catname+'%', startdate, enddate],).fetchall()
+    
+    
     conn.close()
 
     if len(pricehistory)==0:
-        print('No history')
+        #print('No history')
         return 'Error No history found'
         
     prices = []
@@ -195,14 +204,14 @@ def pricechanges():
 @app.route('/product/<productid>')
 def product_prices(productid):
     conn = opendbconn()
-    obsrows = conn.execute('select obsdate, obsprice, promobadgeimagelabel, productweighttext, productname, productid from observations where productid like ? order by obsdate desc', [productid + '%']).fetchall()
+    obsrows = conn.execute('select obsdate, obsprice, promobadgeimagelabel, productweighttext, productname, productid,scanname from observations where productid like ? order by obsdate desc', [productid + '%']).fetchall()
     conn.close()
-    print(len(obsrows))
+    #print(len(obsrows))
     price = []
     for o in obsrows:
         price.append({'date':o[0], 'price': o[1], 'promo':o[2], 'pweight':o[3].split('$')[0]})
-        prod = {'name': o[4], 'id':o[5]}
-
+    o = obsrows[-1]
+    prod = {'name': o[4], 'id':o[5], 'category':o[6]}
     prod['rows'] = len(price)
     dates = {}
     dates['startdate'] = price[0]['date']
@@ -358,12 +367,12 @@ def catprices(category):
 @app.route('/category')
 def categorylist():
     conn = opendbconn()
-    cats = conn.execute('select distinct(scanname) from urls').fetchall()
+    cats = conn.execute('select scanname, count(distinct(productname)) from observations group by scanname order by scanid asc').fetchall()
     conn.close()
 
     catnames = []
     for cat in cats:
-        catnames.append(cat[0])
+        catnames.append([cat[0], cat[1]])
 
 
     return render_template('categorylist.html', cats=catnames)
@@ -406,3 +415,4 @@ def new_prices():
     conn.close()
 
     return jsonify({'increases':increases, 'decreases': decreases})
+

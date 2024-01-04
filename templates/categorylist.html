@@ -9,10 +9,13 @@
             Category list
         </h1>
         <p><a href="..">Back to home</a>
-        <ul>
+        <table>
+            <tr><th>Category</th><th>Product count</th></tr>
+
+ 
             {%for cat in cats%}
-            <li><a href="../category/{{cat}}"">{{cat}}</li>
+            <tr><td><a href="../category/{{cat[0]}}"">{{cat[0]}}</td><td style="text-align: right;">{{cat[1]}}</td></tr>
             {%endfor%}
-        </ul>
+        </table>
     </body>
 </html>
