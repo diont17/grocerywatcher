@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request,abort,g, render_template
 import sqlite3
 from datetime import datetime, timedelta
 import re
-import psycopg2
 
 app = Flask(__name__)
 
@@ -11,7 +10,7 @@ def blank():
     return app.send_static_file('index.html')
 
 def opendbconn():
-    conn = sqlite3.connect('CheeseWatch.db')
+    conn = sqlite3.connect('data/CheeseWatch.db')
     return conn
 
 @app.route('/api/lastupdate')
